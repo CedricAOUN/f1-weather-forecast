@@ -3,3 +3,17 @@
 @tailwind utilities;
 
 
+
+.accordion-container {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 500ms ease-out;
+}
+
+.accordion-container > div {
+    overflow: hidden;
+}
+
+.open {
+    grid-template-rows: 1fr;
+}

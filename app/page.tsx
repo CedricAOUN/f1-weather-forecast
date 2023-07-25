@@ -1,6 +1,11 @@
 import {TrackList} from "@/app/components/TrackList";
+import {getTracks} from "@/app/utils/tracksAPI";
+import {Countdown} from "@/app/components/Countdown";
 
-export default function Home() {
+export default async function Home() {
+    const response = await getTracks();
+    const races = response.data.MRData.RaceTable.Races;
+
 
   return (
     <>
@@ -9,13 +14,13 @@ export default function Home() {
       </header>
       <button className="border-amber-300">Testing Button</button>
       <div className="flex h-10 justify-center flex-col items-center m-2">
-        <h1>Time Until Next Weekend:</h1>
-        <div className='box-border border-amber-300 bg-opacity-40 bg-black p-3'>
-          <p>Countdown</p>
+        <h1>Time Until Next Session:</h1>
+        <div className='box-border border-amber-300 bg-opacity-40 bg-black p-3 text-green-700'>
+            <Countdown races={races}></Countdown>
         </div>
       </div>
       <div className="container p-4 max-w-full">
-      <TrackList></TrackList>
+      <TrackList races={races}></TrackList>
       </div>
     </>
   )
