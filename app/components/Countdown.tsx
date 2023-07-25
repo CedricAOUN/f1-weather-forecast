@@ -10,10 +10,8 @@ interface Props {
 
 export const Countdown = (props: Props) => {
     nextSessionDate(props.races)
-    const currentDate = new Date()
-    currentDate.setSeconds(currentDate.getSeconds() + 10);
 
-    const [target, setTarget] = useState(currentDate);
+    const [target, setTarget] = useState(closestSession);
     const [days, setDays] = useState(0);
     const [hours, setHours] = useState(0);
     const [minutes, setMinutes] = useState(0);
