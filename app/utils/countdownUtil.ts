@@ -46,6 +46,40 @@ export const nextSessionDate = (races: []) => {
     })
 }
 
+export const currentDate = new Date();
+const ONE_HOUR = 60 * 60 * 1000;
+const TWO_HOURS = ONE_HOUR * 2;
+const anHourAhead = Date.now() + ONE_HOUR;
+const twoHoursAhead = Date.now() + TWO_HOURS;
+
+export const isLiveSession = (sessionDate: Date, race: boolean): boolean => {
+    if(race) {
+        return sessionDate.getTime() < twoHoursAhead && sessionDate.getTime() > currentDate.getTime()
+    }
+    return sessionDate.getTime() < anHourAhead && sessionDate.getTime() > currentDate.getTime();
+}
+
+
+
+
+
+export function TrackSessions(track: any) {
+    const Sessions: {sessionName: string, date: Date}[] = []
+    Sessions.push({sessionName: "FP1", date: new Date(`${track.FirstPractice.date} ${track.FirstPractice.time}`)})
+    if(track.hasOwnProperty('Sprint')) {
+        Sessions.push({sessionName: "Qualifying", date: new Date(`${track.Qualifying.date} ${track.Qualifying.time}`)})
+        Sessions.push({sessionName: "Sprint Shootout", date: new Date(`${track.SecondPractice.date} ${track.SecondPractice.time}`)})
+        Sessions.push({sessionName: "Sprint", date: new Date(`${track.Sprint.date} ${track.Sprint.time}`)})
+    } else {
+        Sessions.push({sessionName: "FP2", date: new Date(`${track.SecondPractice.date} ${track.SecondPractice.time}`)})
+        Sessions.push({sessionName: "FP3", date: new Date(`${track.ThirdPractice.date} ${track.ThirdPractice.time}`)})
+        Sessions.push({sessionName: "Qualifying", date: new Date(`${track.Qualifying.date} ${track.Qualifying.time}`)})
+    }
+    Sessions.push({sessionName: "Race", date: new Date(`${track.date} ${track.time}`)})
+    return Sessions;
+}
+
+
 
 export let closestSession = new Date();
 
