@@ -1,10 +1,11 @@
 import {TrackList} from "@/app/components/TrackList";
-import {getTracks} from "@/app/utils/tracksAPI";
+import {addTrackImgs, getTracks} from "@/app/utils/tracksAPI";
 import {Countdown} from "@/app/components/Countdown";
 
 export default async function Home() {
     const response = await getTracks();
     const races = response.data.MRData.RaceTable.Races;
+    addTrackImgs(races);
 
 
   return (
@@ -18,7 +19,7 @@ export default async function Home() {
             <Countdown races={races}></Countdown>
         </div>
       </div>
-      <div className="container p-4 max-w-full">
+      <div className="container p-4 px-24 max-w-full">
       <TrackList races={races}></TrackList>
       </div>
     </>

@@ -1,4 +1,5 @@
 const axios = require('axios');
+import trackImgs from '../../public/tracks.json';
 
 
 export const getTracks = async () => {
@@ -6,4 +7,12 @@ export const getTracks = async () => {
 }
 
 
-
+export function addTrackImgs(tracks: any[]) {
+    tracks.map((track) => {
+        trackImgs.tracks.find((trackImg) => {
+            if(trackImg.location.city == track.Circuit.Location.locality) {
+                return track.track_img = trackImg.image;
+            }
+        })
+    })
+}

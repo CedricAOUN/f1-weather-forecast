@@ -17,7 +17,7 @@ export const TrackList = async (props: Props) => {
                     (new Date(`${track.date} ${track.time}` ) >= currentDate || isLiveSession(new Date(`${track.date} ${track.time}`), true)) &&
                     <TrackItem key={track.round} name={track.raceName} weekend_date={track.date} country={track.Circuit.Location.country}
                                latLng={[track.Circuit.Location.lat, track.Circuit.Location.long]}
-                               sessions={TrackSessions(track)}
+                               sessions={TrackSessions(track)} trackImg={track.track_img}
                     ></TrackItem>
             )}
             </ul>
