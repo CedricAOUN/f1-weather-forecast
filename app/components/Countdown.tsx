@@ -50,7 +50,7 @@ export const Countdown = (props: Props) => {
 
     return (
         <>
-            { loading ? <img className='object-center' src={loadingGif.src} height='30px' width='30px'></img> : <p>{days} Days, {hours} Hours, {minutes} Minutes, {seconds} Seconds</p> }
+            { loading ? <img className='object-center' src={loadingGif.src} height='30px' width='30px'></img> : <p className='text-xl'>{days} Days, {hours} Hours, {minutes} Minutes, {seconds} Seconds</p> }
         </>
     );
 };

@@ -2,6 +2,7 @@
 import {useEffect, useState} from "react";
 import { isLiveSession } from "@/app/utils/countdownUtil";
 import { format, add } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz'
 
 interface Props {
     name: string,
@@ -63,7 +64,7 @@ export const TrackItem = (props: Props) => {
 
 
     return (
-        <li className={`${open ? 'bg-neutral-100 border-x-0 border-y-4' : 'text-white hover:bg-neutral-100 border-y-4 border-x-4 hover:text-black rounded-xl'} bg-red-700 transition-all duration-200 ease-in p-3  border-red-700 shadow-md shadow-red-950`} onClick={handleOpen}>
+        <li className={`${open ? 'bg-neutral-100 border-x-0 border-y-4' : 'text-white hover:bg-neutral-100 border-y-4 border-x-4 hover:text-black rounded-xl bg-red-700'} transition-all duration-200 ease-in p-3 border-red-700 shadow-md shadow-red-950`} onClick={handleOpen}>
             <p className='text-start text-3xl pl-5 font-bold'>{props.name}</p>
             <p className={`text-start pl-5 tracking-widest`}>{format(props.sessions[0].date, 'dd MMM yyyy')} ― {format(displayDate, 'dd MMM yyyy')}</p>
             <div className={`accordion-container mt-3 pl-5 pr-5 ${open ? 'open' : ''}`}>
