@@ -1,5 +1,7 @@
+import {differenceInMilliseconds} from "date-fns";
+
 const axios = require('axios');
-const {add} = require('date-fns')
+const {sub} = require('date-fns')
 
 
 export const getForecast = async (lat: number, lng: number) => {
@@ -7,6 +9,10 @@ export const getForecast = async (lat: number, lng: number) => {
 }
 
 
-export function sessionIsNear(date: Date) {
-    const today = new Date()
+export function grandPrixIsNear(date: Date) {
+    const today = new Date();
+    const fiveDaysAgo = sub(today, {days: 5})
+
+    return date > fiveDaysAgo
+
 }
