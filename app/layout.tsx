@@ -22,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${f1Font.variable} font-sans bg-neutral-900 text-neutral-900 tracking-widest`}>{children}</body>
+      <body className={`${f1Font.variable} font-sans bg-gradient-to-b from-neutral-900 to-neutral-500 text-neutral-900 tracking-normal`}>{children}</body>
     </html>
   )
 }

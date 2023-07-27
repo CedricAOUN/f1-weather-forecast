@@ -11,10 +11,10 @@ export default async function Home() {
   return (
     <>
       <header>
-       <h1 className="text-center bg-red-700 italic p-6 text-white font-bold border-b-4 border-white text-4xl">Formula 1 - Weather Forecast</h1>
+       <h1 className="text-center italic p-6 bg-neutral-900 text-white font-bold border-b-2 border-white text-4xl">Formula 1 - Weather Forecast</h1>
       </header>
       <div className="flex h-10 justify-center flex-col items-center m-2">
-        <h1 className="pt-10 text-white">Time Until Next Session:</h1>
+        <h1 className="pt-16 pb-5 text-white">Time Until Next Session:</h1>
         <div className='box-border border-amber-300 bg-opacity-40 bg-black p-3 text-white'>
             <Countdown races={races}></Countdown>
         </div>
