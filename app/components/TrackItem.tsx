@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { isLiveSession } from "@/app/utils/countdownUtil";
+import { isAnySessionLive, isLiveSession } from "@/app/utils/countdownUtil";
 import { format, add } from "date-fns";
 import { sessionIsNear } from "@/app/utils/weatherAPI";
 import { WeatherIcons } from "@/app/components/WeatherIcons";
@@ -13,26 +13,24 @@ interface Props {
   sessions: { sessionName: string; date: Date }[];
   trackImg: string;
   round: number;
+  isOpen: boolean;
+  onClick: () => void;
 }
 
 export const TrackItem = (props: Props) => {
   const titleRef = useRef(null);
-  const unclickableRef = useRef(null);
   const displayDate = new Date(props.weekend_date);
-  const [open, setOpen] = useState(false);
-  const handleOpen = (event) => {
-    if (event.target != unclickableRef.current) {
-      open ? setOpen(false) : setOpen(true);
-      if (!open) {
-        setTimeout(() => {
-          titleRef.current?.scrollIntoView({ behavior: "smooth" });
-        }, 700);
-      }
+
+  useEffect(() => {
+    if (props.isOpen) {
+      setTimeout(() => {
+        titleRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 700);
     }
-  };
+  }, [props.isOpen]);
 
   const mockdate = new Date(`2023-07-27 0:0:00Z`);
-  const liveSpan = <span className="float-right">🟢 Live</span>;
+  const liveSpan = <span className="float-right animate-pulse">🟢 Live</span>;
 
   function liveDuration(sessionName: string, sessionDate: Date) {
     if (sessionName == "Race") {
@@ -92,24 +90,26 @@ export const TrackItem = (props: Props) => {
       <li
         ref={titleRef}
         className={`${
-          open
+          props.isOpen
             ? "bg-neutral-100 border-x-0 border-y-4"
             : "text-white hover:bg-neutral-100 border-y-4 border-x-4 hover:text-black rounded-xl bg-red-700 "
-        } scroll-my-5 group transition-all duration-200 ease-in p-3 border-red-700 shadow-md shadow-red-950`}
-        onClick={handleOpen}
+        } scroll-mt-3.5 group transition-all duration-200 ease-in p-3 border-red-700 shadow-md shadow-red-950`}
+        onClick={props.onClick}
       >
-        <p className="scroll-auto text-start text-3xl pl-5 font-bold">
-          {props.name}
+        <p className="text-start text-3xl pl-5 font-bold">
+          {props.name} {isAnySessionLive(props.sessions) != "" ? liveSpan : ""}
         </p>
         <p
           className={`text-start pl-5 tracking-widest ${
-            open ? "" : "group-hover:text-red-700"
+            props.isOpen ? "" : "group-hover:text-red-700"
           }`}
         >
           {format(props.sessions[0].date, "dd MMM yyyy")} ―{" "}
           {format(displayDate, "dd MMM yyyy")}
         </p>
-        <div className={`accordion-container py-2 ${open ? "open" : ""}`}>
+        <div
+          className={`accordion-container py-2 ${props.isOpen ? "open" : ""}`}
+        >
           <div className="accordion-item">
             <div className="border-neutral-900 border-2 flex flex-col sm:flex-row">
               <div onClick={(e) => e.stopPropagation()} className="md:w-2/3">
@@ -120,7 +120,11 @@ export const TrackItem = (props: Props) => {
                 <p className="pl-2">
                   <b>Track Layout:</b>
                 </p>
-                <img src={props.trackImg} className="mx-auto h-64" />
+                <img
+                  loading={"lazy"}
+                  src={props.trackImg}
+                  className="mx-auto h-64"
+                />
               </div>
               <div onClick={(e) => e.stopPropagation()} className="w-full">
                 <h1 className="text-xl p-3 sm:border-l-2 sm:border-y-0 border-y-2 border-neutral-900 bg-red-700 text-white font-light tracking-wider">
@@ -131,7 +135,7 @@ export const TrackItem = (props: Props) => {
                   width="100%"
                   height="100%"
                   src={
-                    open
+                    props.isOpen
                       ? `https://embed.windy.com/embed2.html?lat=${props.latLng[0]}&lon=${props.latLng[1]}&detailLat=${props.latLng[0]}&detailLon=${props.latLng[1]}&width=500&height=1000&zoom=9&level=surface&overlay=rain&product=ecmwf&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=true&metricWind=default&metricTemp=default&radarRange=-1`
                       : "about:blank"
                   }

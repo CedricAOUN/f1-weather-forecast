@@ -1,3 +1,5 @@
+import { add, sub } from "date-fns";
+
 export const nextSessionDate = (races: []) => {
   let currentDate = new Date().getTime();
   races.some((race: any) => {
@@ -83,8 +85,31 @@ export const isLiveSession = (sessionDate: Date, race: boolean): boolean => {
   );
 };
 
+export function isAnySessionLive(sessions: any): string {
+  let session = "";
+  sessions.find((session) => {
+    if (isLiveSession(session.date, session.sessionName == "Race")) {
+      return (session = session.sessionName);
+    }
+  });
+  return session;
+}
+
 export const isPastSession = (sessionEndDate: Date): boolean => {
   return sessionEndDate < currentDate;
+};
+
+export const currentGP = (tracks: any): any | null => {
+  let closest = null;
+  tracks.find((track) => {
+    let trackDate = new Date(`${track.date} ${track.time}`);
+    if (
+      trackDate <= add(currentDate, { days: 3 }) &&
+      trackDate >= sub(currentDate, { days: 4 })
+    )
+      return (closest = track);
+  });
+  return closest;
 };
 
 export function TrackSessions(track: any) {

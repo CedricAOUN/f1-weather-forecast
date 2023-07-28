@@ -1,21 +1,11 @@
 "use client";
-import { Tooltip, Button } from "flowbite-react";
+import { Tooltip } from "flowbite-react";
 import { useEffect, useState } from "react";
-import { FaTemperatureLow } from "react-icons/fa";
 import { GiWindsock } from "react-icons/gi";
 import { IoWaterSharp } from "react-icons/io5";
 import { getForecast } from "@/app/utils/weatherAPI";
 import { isLiveSession, isPastSession } from "@/app/utils/countdownUtil";
 import { format } from "date-fns";
-
-interface WeatherProps {
-  text: string;
-  rainChance: number;
-  wind: { speed: number; dir: string };
-  temp: string;
-  percip: number;
-  rainGuarantee: boolean;
-}
 
 interface Props {
   latLng: [number, number];
@@ -29,9 +19,9 @@ export const WeatherIcons = (props: Props) => {
   const iconClasses = "h-10";
   const [dataIsAvailable, setDataIsAvailable] = useState(props.dataAvailable);
   const [infoMessage, setInfoMessage] = useState(
-    "Weather data unavailable yet. Try within 3 days.",
+    "Precise weather data not available yet. Try within 3 days.",
   );
-  const [weatherData, setWeatherData] = useState<any>();
+  // const [weatherData, setWeatherData] = useState<any>();
   const [startWeather, setStartWeather] = useState<any>();
   const [endWeather, setEndWeather] = useState<any>();
 
@@ -45,10 +35,10 @@ export const WeatherIcons = (props: Props) => {
     if (props.dataAvailable && !isPastSession(props.sessionEnd)) {
       fetchWeatherData();
     }
-  }, []);
+  }, [props.dataAvailable]);
 
   async function sortWeather(res: any) {
-    setWeatherData(res.data);
+    // setWeatherData(res.data);
 
     let forecast_day: any;
 
@@ -103,13 +93,19 @@ export const WeatherIcons = (props: Props) => {
               content={`Wind Speed: ${startWeather?.wind_kph}KMH - Wind Direction: ${startWeather?.wind_dir}`}
               id="wind"
             >
-              <GiWindsock className={iconClasses} size={"20"}></GiWindsock>
+              <GiWindsock
+                className={`${iconClasses} fill-red-700`}
+                size={"20"}
+              ></GiWindsock>
             </Tooltip>
             <Tooltip
               content={`Percipitation: ${startWeather?.precip_mm}`}
               id="percip"
             >
-              <IoWaterSharp className={iconClasses} size={"20"}></IoWaterSharp>
+              <IoWaterSharp
+                className={`${iconClasses} fill-cyan-500`}
+                size={"20"}
+              ></IoWaterSharp>
             </Tooltip>
           </div>
           <div className="basis-1/2 w-max bg-red-400 bg-opacity-50 flex gap-4 my-auto justify-center border-neutral-400 border-l-2">
@@ -126,18 +122,24 @@ export const WeatherIcons = (props: Props) => {
               content={`Wind Speed: ${endWeather?.wind_kph}KMH - Wind Direction: ${endWeather?.wind_dir}`}
               id="wind"
             >
-              <GiWindsock className={iconClasses} size={"20"}></GiWindsock>
+              <GiWindsock
+                className={`${iconClasses} fill-red-700`}
+                size={"20"}
+              ></GiWindsock>
             </Tooltip>
             <Tooltip
               content={`Percipitation: ${endWeather?.precip_mm}`}
               id="percip"
             >
-              <IoWaterSharp className={iconClasses} size={"20"}></IoWaterSharp>
+              <IoWaterSharp
+                className={`${iconClasses} fill-cyan-500`}
+                size={"20"}
+              ></IoWaterSharp>
             </Tooltip>
           </div>
         </div>
       ) : (
-        <p className="py-2 px-2 text-neutral-400 bg-amber-300 bg-opacity-50 w-full">
+        <p className="py-2 px-2 text-neutral-400 bg-amber-300 bg-opacity-50 w-full text-center">
           {infoMessage}
         </p>
       )}

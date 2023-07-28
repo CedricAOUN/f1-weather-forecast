@@ -1,16 +1,27 @@
+"use client";
 import { TrackItem } from "@/app/components/TrackItem";
 import {
   currentDate,
   isLiveSession,
   TrackSessions,
 } from "@/app/utils/countdownUtil";
+import { useState } from "react";
 
 interface Props {
   races: [];
 }
 
-export const TrackList = async (props: Props) => {
+export const TrackList = (props: Props) => {
   let tracks = props.races;
+  const [openId, setOpenId] = useState<number | null>(null);
+
+  function handleOpen(id: number) {
+    if (openId == id) {
+      setOpenId(null);
+    } else {
+      setOpenId(id);
+    }
+  }
 
   return (
     <>
@@ -31,6 +42,8 @@ export const TrackList = async (props: Props) => {
                 sessions={TrackSessions(track)}
                 trackImg={track.track_img}
                 round={track.round}
+                onClick={() => handleOpen(track.round)}
+                isOpen={openId === track.round}
               ></TrackItem>
             )
           );

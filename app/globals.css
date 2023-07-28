@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 
-
 .accordion-container {
     display: grid;
     grid-template-rows: 0fr;
@@ -17,3 +16,4 @@
 .open {
     grid-template-rows: 1fr;
 }
+
