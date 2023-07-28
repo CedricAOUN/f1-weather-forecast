@@ -21,7 +21,7 @@ export const WeatherIcons = (props: Props) => {
   const [infoMessage, setInfoMessage] = useState(
     "Precise weather data not available yet. Try within 3 days.",
   );
-  // const [weatherData, setWeatherData] = useState<any>();
+  const [weatherData, setWeatherData] = useState<any>();
   const [startWeather, setStartWeather] = useState<any>();
   const [endWeather, setEndWeather] = useState<any>();
 
@@ -32,14 +32,17 @@ export const WeatherIcons = (props: Props) => {
       });
     };
 
+    if (isPastSession(props.sessionEnd)) {
+      setDataIsAvailable(false);
+      setInfoMessage("Session is over");
+    }
+
     if (props.dataAvailable && !isPastSession(props.sessionEnd)) {
       fetchWeatherData();
     }
-  }, [props.dataAvailable]);
+  }, []);
 
   async function sortWeather(res: any) {
-    // setWeatherData(res.data);
-
     let forecast_day: any;
 
     forecast_day = await res.data.forecast.forecastday.find((day) => {
@@ -62,16 +65,12 @@ export const WeatherIcons = (props: Props) => {
       }
     });
 
-    setStartWeather(forecast_startHour);
-    setEndWeather(forecast_endHour);
-
     if (isLiveSession(props.sessionStart, props.sessionName == "Race")) {
       setStartWeather(res.data.current);
+    } else {
+      setStartWeather(forecast_startHour);
     }
-    if (isPastSession(props.sessionEnd)) {
-      setDataIsAvailable(false);
-      setInfoMessage("Session is over");
-    }
+    setEndWeather(forecast_endHour);
   }
 
   return (
@@ -81,7 +80,11 @@ export const WeatherIcons = (props: Props) => {
         <div className="flex flex-1 justify-center">
           <div className="basis-1/2 w-max bg-green-400 bg-opacity-50 flex gap-4 my-auto justify-center border-neutral-400 border-r-2">
             <Tooltip
-              content={`${startWeather?.condition.text}, Chance of Rain: ${startWeather?.chance_of_rain}%`}
+              content={`${startWeather?.condition.text}${
+                !isLiveSession(props.sessionStart, props.sessionName == "Race")
+                  ? `, Chance of Rain: ${startWeather?.chance_of_rain}%`
+                  : " - Live weather"
+              }`}
               id="default"
             >
               <img

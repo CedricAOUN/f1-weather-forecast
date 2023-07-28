@@ -161,5 +161,3 @@ export function TrackSessions(track: any) {
   });
   return Sessions;
 }
-
-export let closestSession = new Date();

@@ -2,6 +2,7 @@ import { TrackList } from "@/app/components/TrackList";
 import Image from "next/image";
 import { addTrackImgs, getTracks } from "@/app/utils/tracksAPI";
 import { Countdown } from "@/app/components/Countdown";
+import { useEffect, useState } from "react";
 
 export default async function Home() {
   const response = await getTracks();

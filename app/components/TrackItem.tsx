@@ -1,7 +1,7 @@
 "use client";
 import { useContext, useEffect, useRef, useState } from "react";
 import { isAnySessionLive, isLiveSession } from "@/app/utils/countdownUtil";
-import { format, add } from "date-fns";
+import { format, add, sub } from "date-fns";
 import { sessionIsNear } from "@/app/utils/weatherAPI";
 import { WeatherIcons } from "@/app/components/WeatherIcons";
 
@@ -32,9 +32,6 @@ export const TrackItem = (props: Props) => {
     }
   }, [props.isOpen]);
 
-  const mockdate = new Date(`2023-07-27 0:0:00Z`);
-  const liveSpan = <span className="float-right animate-pulse">🟢 Live</span>;
-
   function formatDate(date: Date, race: boolean) {
     const startDate = format(date, "HH:mm");
     const endDate = format(add(date, { hours: 1 }), "HH:mm");
@@ -56,6 +53,7 @@ export const TrackItem = (props: Props) => {
   }
 
   function renderSessions(sessions: { sessionName: string; date: Date }[]) {
+    const liveSpan = <span className="float-right animate-pulse">🟢 Live</span>;
     let paragraphs = [];
     sessions.map((session, index) => {
       paragraphs.push(
@@ -63,7 +61,9 @@ export const TrackItem = (props: Props) => {
           <p className="py-1 px-2">
             <b className="text-[16px]">{session.sessionName}</b>
             {formatDate(session.date, session.sessionName == "Race")}
-            {isLiveSession(session.date, session.sessionName == "Race")}{" "}
+            {isLiveSession(session.date, session.sessionName == "Race")
+              ? liveSpan
+              : ""}
           </p>
           <div className="flex border-t-2 border-neutral-400 p-0 m-0 ">
             <WeatherIcons
@@ -80,6 +80,9 @@ export const TrackItem = (props: Props) => {
     return paragraphs;
   }
 
+  const titleLiveSpan = (
+    <span className="float-right animate-pulse">🟢 Live</span>
+  );
   return (
     <>
       <li
@@ -92,7 +95,7 @@ export const TrackItem = (props: Props) => {
         onClick={props.onClick}
       >
         <p className="text-start text-3xl pl-5 font-bold">
-          {props.name} {isAnySessionLive(props.sessions) ? liveSpan : ""}
+          {props.name} {isAnySessionLive(props.sessions) ? titleLiveSpan : ""}
         </p>
         <p
           className={`text-start pl-5 tracking-widest ${
