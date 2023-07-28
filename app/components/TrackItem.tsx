@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { isLiveSession } from "@/app/utils/countdownUtil";
 import { format, add } from "date-fns";
-import { grandPrixIsNear } from "@/app/utils/weatherAPI";
+import { sessionIsNear } from "@/app/utils/weatherAPI";
 import { WeatherIcons } from "@/app/components/WeatherIcons";
 
 interface Props {
@@ -30,13 +30,6 @@ export const TrackItem = (props: Props) => {
       }
     }
   };
-
-  useEffect(() => {
-    if (open) {
-      if (grandPrixIsNear(props.sessions[0].date)) {
-      }
-    }
-  }, [open]);
 
   const mockdate = new Date(`2023-07-27 0:0:00Z`);
   const liveSpan = <span className="float-right">🟢 Live</span>;
@@ -80,7 +73,13 @@ export const TrackItem = (props: Props) => {
             {liveDuration(session.sessionName, session.date)}{" "}
           </p>
           <div className="flex border-t-2 border-neutral-400 p-0 m-0 ">
-            <WeatherIcons dataAvailable={true}></WeatherIcons>
+            <WeatherIcons
+              sessionName={session.sessionName}
+              dataAvailable={sessionIsNear(session.date)}
+              sessionStart={session.date}
+              sessionEnd={add(session.date, { hours: 1 })}
+              latLng={props.latLng}
+            ></WeatherIcons>
           </div>
         </div>,
       );
