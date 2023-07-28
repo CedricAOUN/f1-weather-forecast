@@ -4,27 +4,28 @@ import {
   closestSession,
   currentGP,
   isAnySessionLive,
-  nextSessionDate,
+  nearestSession,
   TrackSessions,
 } from "@/app/utils/countdownUtil";
 import loadingGif from "../../public/loading.gif";
+import { add } from "date-fns";
 
 interface Props {
   races: [];
 }
 
 export const Countdown = (props: Props) => {
-  nextSessionDate(props.races);
   const [loading, setLoading] = useState(true);
-  const [target, setTarget] = useState(closestSession);
+  const [target, setTarget] = useState(
+    nearestSession(TrackSessions(currentGP(props.races))).date,
+  );
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
-  const [liveStatus, setLiveStatus] = useState<boolean>(false);
-  const [liveSession, setLiveSession] = useState<string>("");
-
-  const currentGrandPrix = currentGP(props.races);
+  const [liveSession, setLiveSession] = useState<string>(
+    isAnySessionLive(TrackSessions(currentGP(props.races))),
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -49,16 +50,10 @@ export const Countdown = (props: Props) => {
       if (d <= 0 && h <= 0 && m <= 0 && s <= 0) {
         setLoading(true);
         clearInterval(interval);
-        nextSessionDate(props.races);
-        setTarget(closestSession);
+        setTarget(nearestSession(TrackSessions(currentGP(props.races))).date);
+        setLiveSession(isAnySessionLive(TrackSessions(currentGP(props.races))));
       }
     }, 1000);
-
-    if (currentGrandPrix != null) {
-      const session = isAnySessionLive(TrackSessions(currentGrandPrix));
-      setLiveStatus(session != "" ? true : false);
-      setLiveSession(session);
-    }
 
     return () => clearInterval(interval);
   }, [target]);
@@ -66,7 +61,7 @@ export const Countdown = (props: Props) => {
   return (
     <>
       <p className="text-center">
-        {liveStatus ? `🟢 ${liveSession} is live right now!` : ""}
+        {!!liveSession ? `🟢 ${liveSession} is live right now!` : ""}
       </p>
       {loading ? (
         <img

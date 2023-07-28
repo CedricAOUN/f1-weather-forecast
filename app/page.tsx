@@ -1,7 +1,7 @@
 import { TrackList } from "@/app/components/TrackList";
+import Image from "next/image";
 import { addTrackImgs, getTracks } from "@/app/utils/tracksAPI";
 import { Countdown } from "@/app/components/Countdown";
-import { WeatherIcons } from "@/app/components/WeatherIcons";
 
 export default async function Home() {
   const response = await getTracks();
@@ -11,7 +11,9 @@ export default async function Home() {
   return (
     <>
       <header>
-        <h1 className="text-center italic p-6 bg-neutral-900 text-white font-bold border-b-2 border-white text-4xl">
+        <h1
+          className={`text-center italic p-6 bg-neutral-900 text-white font-bold border-b-2 border-white text-4xl flag-bg`}
+        >
           Formula 1 - Weather Forecast
         </h1>
       </header>

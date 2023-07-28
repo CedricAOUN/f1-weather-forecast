@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { isAnySessionLive, isLiveSession } from "@/app/utils/countdownUtil";
 import { format, add } from "date-fns";
 import { sessionIsNear } from "@/app/utils/weatherAPI";
@@ -20,6 +20,9 @@ interface Props {
 export const TrackItem = (props: Props) => {
   const titleRef = useRef(null);
   const displayDate = new Date(props.weekend_date);
+  const [sessionParagraphs, setSessionParagraphs] = useState(
+    renderSessions(props.sessions),
+  );
 
   useEffect(() => {
     if (props.isOpen) {
@@ -32,14 +35,6 @@ export const TrackItem = (props: Props) => {
   const mockdate = new Date(`2023-07-27 0:0:00Z`);
   const liveSpan = <span className="float-right animate-pulse">🟢 Live</span>;
 
-  function liveDuration(sessionName: string, sessionDate: Date) {
-    if (sessionName == "Race") {
-      return isLiveSession(sessionDate, true) ? liveSpan : "";
-    } else {
-      return isLiveSession(sessionDate, false) ? liveSpan : "";
-    }
-  }
-
   function formatDate(date: Date, race: boolean) {
     const startDate = format(date, "HH:mm");
     const endDate = format(add(date, { hours: 1 }), "HH:mm");
@@ -47,8 +42,8 @@ export const TrackItem = (props: Props) => {
 
     return (
       <span className="p-2 justify-self-center">
-        <span className="px-2 text-neutral-200 rounded-l-2xl bg-neutral-400">
-          {format(date, "E")}
+        <span className="px-2 text-black rounded-l-2xl bg-amber-400 bg-opacity-50">
+          {format(date, "EEEE")}
         </span>
         <span className="px-2 bg-green-400 bg-opacity-50 border-r-2 border-neutral-400">
           {startDate}
@@ -68,7 +63,7 @@ export const TrackItem = (props: Props) => {
           <p className="py-1 px-2">
             <b className="text-[16px]">{session.sessionName}</b>
             {formatDate(session.date, session.sessionName == "Race")}
-            {liveDuration(session.sessionName, session.date)}{" "}
+            {isLiveSession(session.date, session.sessionName == "Race")}{" "}
           </p>
           <div className="flex border-t-2 border-neutral-400 p-0 m-0 ">
             <WeatherIcons
@@ -97,7 +92,7 @@ export const TrackItem = (props: Props) => {
         onClick={props.onClick}
       >
         <p className="text-start text-3xl pl-5 font-bold">
-          {props.name} {isAnySessionLive(props.sessions) != "" ? liveSpan : ""}
+          {props.name} {isAnySessionLive(props.sessions) ? liveSpan : ""}
         </p>
         <p
           className={`text-start pl-5 tracking-widest ${
@@ -116,7 +111,7 @@ export const TrackItem = (props: Props) => {
                 <h1 className="text-xl p-3 border-b-2 border-neutral-900 bg-red-700 text-white font-light tracking-wider">
                   Sessions:
                 </h1>
-                {renderSessions(props.sessions)}
+                {sessionParagraphs}
                 <p className="pl-2">
                   <b>Track Layout:</b>
                 </p>

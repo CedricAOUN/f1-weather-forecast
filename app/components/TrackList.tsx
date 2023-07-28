@@ -1,10 +1,6 @@
 "use client";
 import { TrackItem } from "@/app/components/TrackItem";
-import {
-  currentDate,
-  isLiveSession,
-  TrackSessions,
-} from "@/app/utils/countdownUtil";
+import { isLiveSession, TrackSessions } from "@/app/utils/countdownUtil";
 import { useState } from "react";
 
 interface Props {
@@ -28,7 +24,7 @@ export const TrackList = (props: Props) => {
       <ul className="flex flex-col gap-5 w-auto">
         {tracks.map((track: any, index) => {
           return (
-            (new Date(`${track.date} ${track.time}`) >= currentDate ||
+            (new Date(`${track.date} ${track.time}`) >= new Date() ||
               isLiveSession(new Date(`${track.date} ${track.time}`), true)) && (
               <TrackItem
                 key={track.round}
