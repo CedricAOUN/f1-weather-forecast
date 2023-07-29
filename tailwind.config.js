@@ -13,10 +13,14 @@ module.exports = {
         rotate: {
           "100%": { transform: "rotate(90deg)" },
         },
+        "rotate-reverse": {
+          "0%": { transform: "rotate(90deg)" },
+          "100%": { transform: "rotate(0deg)" },
+        },
       },
       animation: {
         rotate: "rotate 0.5s forwards 1",
-        "rotate-reverse": "rotate 0.5s reverse 1",
+        "rotate-reverse": "rotate-reverse 0.5s forwards 1",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

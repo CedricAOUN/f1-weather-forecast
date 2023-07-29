@@ -98,7 +98,9 @@ export const TrackItem = (props: Props) => {
         <div id="container" className="flex">
           <AiOutlineRight
             size={32}
-            className={`${props.isOpen ? "animate-rotate" : ""} my-auto`}
+            className={`${
+              props.isOpen ? "animate-rotate" : "animate-rotate-reverse"
+            } my-auto`}
           ></AiOutlineRight>
           <div id="titles">
             <p className="text-start text-3xl pl-5 font-bold">
