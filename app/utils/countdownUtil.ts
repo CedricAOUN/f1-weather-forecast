@@ -70,7 +70,8 @@ export const isLiveSession = (sessionDate: Date, race: boolean): boolean => {
     );
   }
   return (
-    sessionDate > sub(currentDate, { hours: 1 }) && sessionDate < currentDate
+    sessionDate > sub(currentDate, { hours: 1, minutes: 15 }) &&
+    sessionDate < currentDate
   );
 };
 

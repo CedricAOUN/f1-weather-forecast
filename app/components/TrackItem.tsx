@@ -4,6 +4,7 @@ import { isAnySessionLive, isLiveSession } from "@/app/utils/countdownUtil";
 import { format, add, sub } from "date-fns";
 import { sessionIsNear } from "@/app/utils/weatherAPI";
 import { WeatherIcons } from "@/app/components/WeatherIcons";
+import { AiOutlineRight } from "react-icons/ai";
 
 interface Props {
   name: string;
@@ -81,7 +82,7 @@ export const TrackItem = (props: Props) => {
   }
 
   const titleLiveSpan = (
-    <span className="float-right animate-pulse">🟢 Live</span>
+    <span className="float-right animate-pulse mt-4 px-4">🟢 Live</span>
   );
   return (
     <>
@@ -94,17 +95,26 @@ export const TrackItem = (props: Props) => {
         } scroll-mt-3.5 group transition-all duration-200 ease-in p-3 border-red-700 shadow-md shadow-red-950`}
         onClick={props.onClick}
       >
-        <p className="text-start text-3xl pl-5 font-bold">
-          {props.name} {isAnySessionLive(props.sessions) ? titleLiveSpan : ""}
-        </p>
-        <p
-          className={`text-start pl-5 tracking-widest ${
-            props.isOpen ? "" : "group-hover:text-red-700"
-          }`}
-        >
-          {format(props.sessions[0].date, "dd MMM yyyy")} ―{" "}
-          {format(displayDate, "dd MMM yyyy")}
-        </p>
+        <div id="container" className="flex">
+          <AiOutlineRight
+            size={32}
+            className={`${props.isOpen ? "animate-rotate" : ""} my-auto`}
+          ></AiOutlineRight>
+          <div id="titles">
+            <p className="text-start text-3xl pl-5 font-bold">
+              {props.name}{" "}
+              {isAnySessionLive(props.sessions) ? titleLiveSpan : ""}
+            </p>
+            <p
+              className={`text-start pl-5 tracking-widest ${
+                props.isOpen ? "" : "group-hover:text-red-700"
+              }`}
+            >
+              {format(props.sessions[0].date, "dd MMM yyyy")} ―{" "}
+              {format(displayDate, "dd MMM yyyy")}
+            </p>
+          </div>
+        </div>
         <div
           className={`accordion-container py-2 ${props.isOpen ? "open" : ""}`}
         >

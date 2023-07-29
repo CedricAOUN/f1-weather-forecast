@@ -8,6 +8,7 @@ import {
 } from "@/app/utils/countdownUtil";
 import loadingGif from "../../public/loading.gif";
 import { add } from "date-fns";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 interface Props {
   races: [];
@@ -59,21 +60,19 @@ export const Countdown = (props: Props) => {
 
   return (
     <>
-      <p className="text-center">
-        {!!liveSession ? `🟢 ${liveSession} is live right now!` : ""}
-      </p>
       {loading ? (
-        <img
-          className="object-center"
-          src={loadingGif.src}
-          height="30px"
-          width="30px"
-        ></img>
+        <AiOutlineLoading3Quarters
+          className="animate-spin mx-auto"
+          size={32}
+        ></AiOutlineLoading3Quarters>
       ) : (
         <p className="text-xl">
           {days} Days, {hours} Hours, {minutes} Minutes, {seconds} Seconds
         </p>
       )}
+      <p className="text-center">
+        {!!liveSession ? `🟢 ${liveSession} is live!` : ""}
+      </p>
     </>
   );
 };
