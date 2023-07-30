@@ -2,6 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
+import { CountdownContextProvider } from "./context/CountdownContext";
 
 const f1Font = localFont({
   src: "../public/fonts/Formula1-Regular_web_0.ttf",
@@ -25,7 +26,7 @@ export default function RootLayout({
       <body
         className={`${f1Font.variable} font-sans bg-gradient-to-b from-neutral-900 to-neutral-500 text-neutral-900 tracking-normal`}
       >
-        {children}
+        <CountdownContextProvider>{children}</CountdownContextProvider>
       </body>
     </html>
   );

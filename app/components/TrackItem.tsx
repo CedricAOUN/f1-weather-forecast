@@ -5,6 +5,7 @@ import { format, add, sub } from "date-fns";
 import { sessionIsNear } from "@/app/utils/weatherAPI";
 import { WeatherIcons } from "@/app/components/WeatherIcons";
 import { AiOutlineRight } from "react-icons/ai";
+import { useCountdownContext } from "@/app/context/CountdownContext";
 
 interface Props {
   name: string;
@@ -19,10 +20,14 @@ interface Props {
 }
 
 export const TrackItem = (props: Props) => {
+  const { countdownEnded } = useCountdownContext();
   const titleRef = useRef(null);
   const displayDate = new Date(props.weekend_date);
   const [sessionParagraphs, setSessionParagraphs] = useState(
     renderSessions(props.sessions),
+  );
+  const [anySessionLive, setAnySessionLive] = useState(
+    isAnySessionLive(props.sessions),
   );
 
   useEffect(() => {
@@ -32,6 +37,12 @@ export const TrackItem = (props: Props) => {
       }, 700);
     }
   }, [props.isOpen]);
+
+  useEffect(() => {
+    setSessionParagraphs(renderSessions(props.sessions));
+    setAnySessionLive(isAnySessionLive(props.sessions));
+    console.log("Re-rendered!");
+  }, [countdownEnded]);
 
   function formatDate(date: Date, race: boolean) {
     const startDate = format(date, "HH:mm");
@@ -104,8 +115,7 @@ export const TrackItem = (props: Props) => {
           ></AiOutlineRight>
           <div id="titles">
             <p className="text-start text-3xl pl-5 font-bold">
-              {props.name}{" "}
-              {isAnySessionLive(props.sessions) ? titleLiveSpan : ""}
+              {props.name} {anySessionLive ? titleLiveSpan : ""}
             </p>
             <p
               className={`text-start pl-5 tracking-widest ${

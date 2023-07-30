@@ -1,13 +1,44 @@
+"use client";
 import { TrackList } from "@/app/components/TrackList";
-import Image from "next/image";
 import { addTrackImgs, getTracks } from "@/app/utils/tracksAPI";
 import { Countdown } from "@/app/components/Countdown";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
-export default async function Home() {
-  const response = await getTracks();
-  const races = response.data.MRData.RaceTable.Races;
-  addTrackImgs(races);
+export default function Home() {
+  const [races, setRaces] = useState<any>(null);
+  const [countdownEnded, setCountdownEnded] = useState(0);
+
+  useMemo(() => {
+    async function getRaces() {
+      const response = await getTracks();
+      let races = await response.data.MRData.RaceTable.Races;
+      await addTrackImgs(races);
+      setRaces(races);
+    }
+
+    getRaces();
+  }, []);
+
+  if (races === null) {
+    return (
+      <>
+        <div className="flex justify-center items-center h-screen w-screen">
+          <p className="text-center py-auto text-red-700">
+            {" "}
+            <span>
+              <AiOutlineLoading3Quarters
+                className="animate-spin mx-auto"
+                size={32}
+                color={"red"}
+              ></AiOutlineLoading3Quarters>
+            </span>
+            Loading...
+          </p>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>

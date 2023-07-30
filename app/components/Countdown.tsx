@@ -6,15 +6,15 @@ import {
   nearestSession,
   TrackSessions,
 } from "@/app/utils/countdownUtil";
-import loadingGif from "../../public/loading.gif";
-import { add } from "date-fns";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { useCountdownContext } from "@/app/context/CountdownContext";
 
 interface Props {
   races: [];
 }
 
 export const Countdown = (props: Props) => {
+  const { countdownEnded, setCountdownEnded } = useCountdownContext();
   const [loading, setLoading] = useState(true);
   const [target, setTarget] = useState(
     nearestSession(TrackSessions(currentGP(props.races))).date,
@@ -52,6 +52,7 @@ export const Countdown = (props: Props) => {
         clearInterval(interval);
         setTarget(nearestSession(TrackSessions(currentGP(props.races))).date);
         setLiveSession(isAnySessionLive(TrackSessions(currentGP(props.races))));
+        setCountdownEnded(countdownEnded + 1);
       }
     }, 1000);
 

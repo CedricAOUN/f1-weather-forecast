@@ -6,6 +6,7 @@ import { IoWaterSharp } from "react-icons/io5";
 import { getForecast } from "@/app/utils/weatherAPI";
 import { isLiveSession, isPastSession } from "@/app/utils/countdownUtil";
 import { format } from "date-fns";
+import { useCountdownContext } from "@/app/context/CountdownContext";
 
 interface Props {
   latLng: [number, number];
@@ -16,6 +17,7 @@ interface Props {
 }
 
 export const WeatherIcons = (props: Props) => {
+  const { countdownEnded } = useCountdownContext();
   const iconClasses = "h-10";
   const [dataIsAvailable, setDataIsAvailable] = useState(props.dataAvailable);
   const [infoMessage, setInfoMessage] = useState(
@@ -41,6 +43,23 @@ export const WeatherIcons = (props: Props) => {
       fetchWeatherData();
     }
   }, []);
+
+  useEffect(() => {
+    const fetchWeatherData = async () => {
+      await getForecast(props.latLng[0], props.latLng[1]).then((res) => {
+        sortWeather(res);
+      });
+    };
+
+    if (isPastSession(props.sessionEnd)) {
+      setDataIsAvailable(false);
+      setInfoMessage("Session is over");
+    }
+
+    if (props.dataAvailable && !isPastSession(props.sessionEnd)) {
+      fetchWeatherData();
+    }
+  }, [countdownEnded]);
 
   async function sortWeather(res: any) {
     let forecast_day: any;
@@ -112,7 +131,7 @@ export const WeatherIcons = (props: Props) => {
                 size={"20"}
               ></IoWaterSharp>
             </Tooltip>
-            {isLiveSession(props.sessionStart, props.sessionName == "Race") || (
+            {isLiveSession(props.sessionStart, props.sessionName == "Race") && (
               <span className="bg-green-800 rounded align-middle h-8 px-2 mt-1 pt-2 animate-pulse text-xs text-white">
                 Live
               </span>
