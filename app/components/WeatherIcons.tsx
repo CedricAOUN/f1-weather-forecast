@@ -78,12 +78,14 @@ export const WeatherIcons = (props: Props) => {
       {" "}
       {dataIsAvailable ? (
         <div className="flex flex-1 justify-center">
-          <div className="basis-1/2 w-max bg-green-400 bg-opacity-50 flex gap-4 my-auto justify-center border-neutral-400 border-r-2">
+          <div
+            className={`basis-1/2 w-max bg-green-400 flex gap-4 my-auto justify-around border-r-2 border-neutral-400 bg-opacity-50`}
+          >
             <Tooltip
               content={`${startWeather?.condition.text}${
                 !isLiveSession(props.sessionStart, props.sessionName == "Race")
                   ? `, Chance of Rain: ${startWeather?.chance_of_rain}%`
-                  : " - Live weather"
+                  : ""
               }`}
               id="default"
             >
@@ -110,8 +112,13 @@ export const WeatherIcons = (props: Props) => {
                 size={"20"}
               ></IoWaterSharp>
             </Tooltip>
+            {isLiveSession(props.sessionStart, props.sessionName == "Race") || (
+              <span className="bg-green-800 rounded align-middle h-8 px-2 mt-1 pt-2 animate-pulse text-xs text-white">
+                Live
+              </span>
+            )}
           </div>
-          <div className="basis-1/2 w-max bg-red-400 bg-opacity-50 flex gap-4 my-auto justify-center border-neutral-400 border-l-2">
+          <div className="basis-1/2 w-max bg-red-400 bg-opacity-30 flex gap-4 my-auto justify-around border-neutral-400 border-l-2">
             <Tooltip
               content={`${endWeather?.condition.text}, Chance of Rain: ${endWeather?.chance_of_rain}%`}
               id="default"
