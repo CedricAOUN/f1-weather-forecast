@@ -1,7 +1,7 @@
 "use client";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { isAnySessionLive, isLiveSession } from "@/app/utils/countdownUtil";
-import { format, add, sub } from "date-fns";
+import { format, add } from "date-fns";
 import { sessionIsNear } from "@/app/utils/weatherAPI";
 import { WeatherIcons } from "@/app/components/WeatherIcons";
 import { AiOutlineRight } from "react-icons/ai";
@@ -96,7 +96,7 @@ export const TrackItem = (props: Props) => {
   }
 
   const titleLiveSpan = (
-    <span className="float-right animate-pulse mt-4 px-4">🟢 Live</span>
+    <span className="animate-pulse ml-auto text-2xl m-3">🟢 Live</span>
   );
   return (
     <>
@@ -109,7 +109,10 @@ export const TrackItem = (props: Props) => {
         } scroll-mt-3.5 group transition-all duration-200 ease-in p-3 border-red-700 shadow-md shadow-red-950`}
         onClick={props.onClick}
       >
-        <div id="container" className="flex">
+        <div
+          id="container"
+          className={`flex w-full ${anySessionLive && "justify-between"}`}
+        >
           <AiOutlineRight
             size={32}
             className={`${
@@ -117,9 +120,7 @@ export const TrackItem = (props: Props) => {
             } my-auto`}
           ></AiOutlineRight>
           <div id="titles">
-            <p className="text-start text-3xl pl-5 font-bold">
-              {props.name} {anySessionLive ? titleLiveSpan : ""}
-            </p>
+            <p className="text-start text-3xl pl-5 font-bold ">{props.name}</p>
             <p
               className={`text-start pl-5 tracking-widest ${
                 props.isOpen ? "" : "group-hover:text-red-700"
@@ -129,6 +130,7 @@ export const TrackItem = (props: Props) => {
               {format(displayDate, "dd MMM yyyy")}
             </p>
           </div>
+          {anySessionLive ? titleLiveSpan : ""}
         </div>
         <div
           className={`accordion-container py-2 ${props.isOpen ? "open" : ""}`}
@@ -145,6 +147,7 @@ export const TrackItem = (props: Props) => {
                 </p>
                 <img
                   loading={"lazy"}
+                  alt={`Track layout of the ${props.name}, in ${props.country}`}
                   src={props.trackImg}
                   className="mx-auto h-64"
                 />

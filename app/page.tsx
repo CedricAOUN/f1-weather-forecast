@@ -7,7 +7,6 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export default function Home() {
   const [races, setRaces] = useState<any>(null);
-  const [countdownEnded, setCountdownEnded] = useState(0);
 
   useMemo(() => {
     async function getRaces() {
@@ -44,7 +43,8 @@ export default function Home() {
     <>
       <header>
         <h1
-          className={`text-center italic p-6 bg-neutral-900 text-white font-bold border-b-2 border-white text-4xl flag-bg`}
+          className={`text-center italic p-6 bg-neutral-900 text-neutral-100 drop-shadow-md font-bold border-b-2 border-white text-4xl 
+          bg-gradient-to-br from-red-800 from-60% to-neutral-300 opacity-90`}
         >
           Formula 1 - Weather Forecast
         </h1>
