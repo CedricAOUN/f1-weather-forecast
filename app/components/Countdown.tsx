@@ -4,6 +4,7 @@ import {
   currentGP,
   isAnySessionLive,
   nearestSession,
+  nextGP,
   TrackSessions,
 } from "@/app/utils/countdownUtil";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
@@ -17,7 +18,9 @@ export const Countdown = (props: Props) => {
   const { countdownEnded, setCountdownEnded } = useCountdownContext();
   const [loading, setLoading] = useState(true);
   const [target, setTarget] = useState(
-    nearestSession(TrackSessions(currentGP(props.races))).date,
+    nearestSession(TrackSessions(currentGP(props.races))) != null
+      ? nearestSession(TrackSessions(currentGP(props.races))).date
+      : nearestSession(TrackSessions(nextGP(props.races))).date,
   );
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
@@ -31,7 +34,7 @@ export const Countdown = (props: Props) => {
     const interval = setInterval(() => {
       setLoading(false);
       const now = new Date();
-      const difference = target.getTime() - now.getTime();
+      const difference = target?.getTime() - now.getTime();
 
       const d = Math.floor(difference / (1000 * 60 * 60 * 24));
       setDays(d);
@@ -67,9 +70,11 @@ export const Countdown = (props: Props) => {
           size={32}
         ></AiOutlineLoading3Quarters>
       ) : (
-        <p className="text-xl">
-          {days} Days, {hours} Hours, {minutes} Minutes, {seconds} Seconds
-        </p>
+        (target == null && <p>No more sessions! See you next year!</p>) || (
+          <p className="text-xl">
+            {days} Days, {hours} Hours, {minutes} Minutes, {seconds} Seconds
+          </p>
+        )
       )}
       <p className="text-center">
         {!!liveSession ? `🟢 ${liveSession} is live!` : ""}

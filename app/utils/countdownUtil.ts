@@ -86,7 +86,7 @@ export function isAnySessionLive(sessions: any): string {
 }
 
 export const isPastSession = (sessionEndDate: Date): boolean => {
-  return sessionEndDate < new Date();
+  return add(sessionEndDate, { hours: 1 }) < new Date();
 };
 
 export const currentGP = (tracks: any): any | null => {
@@ -102,6 +102,16 @@ export const currentGP = (tracks: any): any | null => {
   return closest;
 };
 
+export const nextGP = (tracks: any): any | null => {
+  let sortedTracks = tracks.sort((a, b) => {
+    return parseInt(a.round) - parseInt(b.round);
+  });
+
+  return sortedTracks.find((track) =>
+    parseInt(track.round) > parseInt(currentGP(tracks).round) ? track : null,
+  );
+};
+
 export function nearestSession(trackSessions: any) {
   let closest;
   let sortedSessions = trackSessions.sort((a, b) => {
@@ -114,6 +124,8 @@ export function nearestSession(trackSessions: any) {
   sortedSessions.find((session) => {
     if (session.date > new Date()) {
       return (closest = session);
+    } else {
+      return (closest = null);
     }
   });
   return closest;
