@@ -81,7 +81,11 @@ export const TrackItem = (props: Props) => {
               sessionName={session.sessionName}
               dataAvailable={sessionIsNear(session.date)}
               sessionStart={session.date}
-              sessionEnd={add(session.date, { hours: 1 })}
+              sessionEnd={
+                session.sessionName == "Race"
+                  ? add(session.date, { hours: 2 })
+                  : add(session.date, { hours: 1 })
+              }
               latLng={props.latLng}
             ></WeatherIcons>
           </div>

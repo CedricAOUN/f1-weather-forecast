@@ -86,7 +86,7 @@ export function isAnySessionLive(sessions: any): string {
 }
 
 export const isPastSession = (sessionEndDate: Date): boolean => {
-  return add(sessionEndDate, { hours: 1 }) < new Date();
+  return sessionEndDate < new Date();
 };
 
 export const currentGP = (tracks: any): any | null => {
