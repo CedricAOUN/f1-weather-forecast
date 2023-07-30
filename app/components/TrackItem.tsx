@@ -41,7 +41,6 @@ export const TrackItem = (props: Props) => {
   useEffect(() => {
     setSessionParagraphs(renderSessions(props.sessions));
     setAnySessionLive(isAnySessionLive(props.sessions));
-    console.log("Re-rendered!");
   }, [countdownEnded]);
 
   function formatDate(date: Date, race: boolean) {

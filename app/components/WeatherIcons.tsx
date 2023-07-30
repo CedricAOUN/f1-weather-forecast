@@ -39,7 +39,7 @@ export const WeatherIcons = (props: Props) => {
       setInfoMessage("Session is over");
     }
 
-    if (props.dataAvailable && !isPastSession(props.sessionEnd)) {
+    if (dataIsAvailable && !isPastSession(props.sessionEnd)) {
       fetchWeatherData();
     }
   }, []);
@@ -56,7 +56,7 @@ export const WeatherIcons = (props: Props) => {
       setInfoMessage("Session is over");
     }
 
-    if (props.dataAvailable && !isPastSession(props.sessionEnd)) {
+    if (dataIsAvailable && !isPastSession(props.sessionEnd)) {
       fetchWeatherData();
     }
   }, [countdownEnded]);
