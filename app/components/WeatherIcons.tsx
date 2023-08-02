@@ -6,6 +6,7 @@ import { IoWaterSharp } from "react-icons/io5";
 import { getForecast } from "@/app/utils/weatherAPI";
 import { isLiveSession, isPastSession } from "@/app/utils/countdownUtil";
 import { format } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 import { useCountdownContext } from "@/app/context/CountdownContext";
 
 interface Props {
@@ -63,23 +64,31 @@ export const WeatherIcons = (props: Props) => {
 
   async function sortWeather(res: any) {
     let forecast_day: any;
+    let timezone_id: string = await res.data.location.tz_id;
 
     forecast_day = await res.data.forecast.forecastday.find((day) => {
-      if (day.date == format(props.sessionStart, "yyyy-MM-dd")) {
+      if (
+        day.date ==
+        formatInTimeZone(props.sessionStart, timezone_id, "yyyy-MM-dd")
+      ) {
         return day;
       }
     });
 
     let forecast_startHour: any = await forecast_day?.hour.find((hour) => {
       if (
-        format(new Date(hour.time), "HH") == format(props.sessionStart, "HH")
+        format(new Date(hour.time), "HH") ==
+        formatInTimeZone(props.sessionStart, timezone_id, "HH")
       ) {
         return hour;
       }
     });
 
     let forecast_endHour: any = await forecast_day?.hour.find((hour) => {
-      if (format(new Date(hour.time), "HH") == format(props.sessionEnd, "HH")) {
+      if (
+        format(new Date(hour.time), "HH") ==
+        formatInTimeZone(props.sessionEnd, timezone_id, "HH")
+      ) {
         return hour;
       }
     });
