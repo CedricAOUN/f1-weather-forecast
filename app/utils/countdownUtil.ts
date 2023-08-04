@@ -1,66 +1,5 @@
-import { add, sub } from "date-fns";
-
-// export const nextSessionDate = (races: []) => {
-//   let currentDate = new Date().getTime();
-//   races.find((race: any) => {
-//     if (new Date(`${race.date} ${race.time}`).getTime() > currentDate) {
-//       if (race.hasOwnProperty("Sprint")) {
-//         let firstSession = new Date(
-//           `${race.FirstPractice.date} ${race.FirstPractice.time}`,
-//         );
-//         let secondSession = new Date(
-//           `${race.Qualifying.date} ${race.Qualifying.time}`,
-//         );
-//         let thirdSession = new Date(
-//           `${race.SecondPractice.date} ${race.SecondPractice.time}`,
-//         );
-//         let fourthSession = new Date(`${race.Sprint.date} ${race.Sprint.time}`);
-//         let raceSession = new Date(`${race.date} ${race.time}`);
-//
-//         let dateArray = [
-//           firstSession,
-//           secondSession,
-//           thirdSession,
-//           fourthSession,
-//           raceSession,
-//         ];
-//
-//         let closest = dateArray.map((d) =>
-//           Math.abs(new Date().getTime() - new Date(d).getTime()),
-//         );
-//
-//         return dateArray[closest.indexOf(Math.min(...closest))];
-//       } else {
-//         let firstSession = new Date(
-//           `${race.FirstPractice.date} ${race.FirstPractice.time}`,
-//         );
-//         let secondSession = new Date(
-//           `${race.SecondPractice.date} ${race.SecondPractice.time}`,
-//         );
-//         let thirdSession = new Date(
-//           `${race.ThirdPractice.date} ${race.ThirdPractice.time}`,
-//         );
-//         let fourthSession = new Date(
-//           `${race.Qualifying.date} ${race.Qualifying.time}`,
-//         );
-//         let raceSession = new Date(`${race.date} ${race.time}`);
-//
-//         let dateArray = [
-//           firstSession,
-//           secondSession,
-//           thirdSession,
-//           fourthSession,
-//           raceSession,
-//         ];
-//         let closest = dateArray.map((d) =>
-//           Math.abs(new Date().getTime() - new Date(d).getTime()),
-//         );
-//
-//         return dateArray[closest.indexOf(Math.min(...closest))];
-//       }
-//     }
-//   });
-// };
+import { sub } from "date-fns";
+import { getNextTrack } from "@/app/utils/tracksAPI";
 
 export const isLiveSession = (sessionDate: Date, race: boolean): boolean => {
   let currentDate = new Date();
@@ -89,27 +28,15 @@ export const isPastSession = (sessionEndDate: Date): boolean => {
   return sessionEndDate < new Date();
 };
 
-export const currentGP = (tracks: any): any | null => {
-  let closest = null;
-  tracks.find((track) => {
-    let trackDate = new Date(`${track.date} ${track.time}`);
-    if (
-      trackDate <= add(new Date(), { days: 3 }) &&
-      trackDate >= sub(new Date(), { days: 4 })
-    )
-      return (closest = track);
-  });
-  return closest;
-};
+export const currentGP = async () => {
+  let nextGPRes = await getNextTrack();
+  let nextGP = nextGPRes.data.MRData.RaceTable.Races[0];
 
-export const nextGP = (tracks: any): any | null => {
-  let sortedTracks = tracks.sort((a, b) => {
-    return parseInt(a.round) - parseInt(b.round);
-  });
-
-  return sortedTracks.find((track) =>
-    parseInt(track.round) > parseInt(currentGP(tracks).round) ? track : null,
-  );
+  if (nextGP.date <= new Date()) {
+    return null;
+  } else {
+    return nextGP;
+  }
 };
 
 export function nearestSession(trackSessions: any) {

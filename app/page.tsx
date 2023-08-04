@@ -2,13 +2,14 @@
 import { TrackList } from "@/app/components/TrackList";
 import { addTrackImgs, getTracks } from "@/app/utils/tracksAPI";
 import { Countdown } from "@/app/components/Countdown";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { currentGP } from "@/app/utils/countdownUtil";
 
 export default function Home() {
   const [races, setRaces] = useState<any>(null);
 
-  useMemo(() => {
+  useEffect(() => {
     async function getRaces() {
       const response = await getTracks();
       let races = await response.data.MRData.RaceTable.Races;

@@ -4,7 +4,6 @@ import {
   currentGP,
   isAnySessionLive,
   nearestSession,
-  nextGP,
   TrackSessions,
 } from "@/app/utils/countdownUtil";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
@@ -17,18 +16,22 @@ interface Props {
 export const Countdown = (props: Props) => {
   const { countdownEnded, setCountdownEnded } = useCountdownContext();
   const [loading, setLoading] = useState(true);
-  const [target, setTarget] = useState(
-    nearestSession(TrackSessions(currentGP(props.races))) != null
-      ? nearestSession(TrackSessions(currentGP(props.races))).date
-      : nearestSession(TrackSessions(nextGP(props.races))).date,
-  );
+  const [target, setTarget] = useState<Date>(null);
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
-  const [liveSession, setLiveSession] = useState<string>(
-    isAnySessionLive(TrackSessions(currentGP(props.races))),
-  );
+  const [liveSession, setLiveSession] = useState<string>();
+  // isAnySessionLive(TrackSessions(currentGP(props.races))),
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setTarget(nearestSession(TrackSessions(await currentGP())).date);
+      setLiveSession(isAnySessionLive(TrackSessions(await currentGP())));
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -53,8 +56,8 @@ export const Countdown = (props: Props) => {
       if (d <= 0 && h <= 0 && m <= 0 && s <= 0) {
         setLoading(true);
         clearInterval(interval);
-        setTarget(nearestSession(TrackSessions(currentGP(props.races))).date);
-        setLiveSession(isAnySessionLive(TrackSessions(currentGP(props.races))));
+        setTarget(nearestSession(TrackSessions(currentGP())).date);
+        setLiveSession(isAnySessionLive(TrackSessions(currentGP())));
         setCountdownEnded(countdownEnded + 1);
       }
     }, 1000);
@@ -70,7 +73,7 @@ export const Countdown = (props: Props) => {
           size={32}
         ></AiOutlineLoading3Quarters>
       ) : (
-        (target == null && <p>No more sessions! See you next year!</p>) || (
+        (target == null && <p>Waiting for results.</p>) || (
           <p className="text-xl">
             {days} Days, {hours} Hours, {minutes} Minutes, {seconds} Seconds
           </p>
