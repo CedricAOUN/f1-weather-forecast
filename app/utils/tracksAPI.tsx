@@ -6,11 +6,11 @@ export const getTracks = async () => {
 };
 
 export const getLastTrack = async () => {
-  return await axios.get("http://ergast.com/api/f1/current/last.json");
+  return await axios.get("https://ergast.com/api/f1/current/last.json");
 };
 
 export const getNextTrack = async () => {
-  return await axios.get("http://ergast.com/api/f1/current/next.json");
+  return await axios.get("https://ergast.com/api/f1/current/next.json");
 };
 
 export function addTrackImgs(tracks: any[]) {
