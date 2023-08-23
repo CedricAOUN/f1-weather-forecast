@@ -29,26 +29,17 @@ export const WeatherIcons = (props: Props) => {
   const [endWeather, setEndWeather] = useState<any>();
 
   useEffect(() => {
-    const fetchWeatherData = async () => {
-      await getForecast(props.latLng[0], props.latLng[1]).then((res) => {
-        sortWeather(res);
-      });
-    };
-
-    if (isPastSession(props.sessionEnd)) {
-      setDataIsAvailable(false);
-      setInfoMessage("Session is over");
-    }
-
-    if (dataIsAvailable && !isPastSession(props.sessionEnd)) {
-      fetchWeatherData();
-    }
+    getData();
   }, []);
 
   useEffect(() => {
+    getData();
+  }, [countdownEnded]);
+
+  function getData() {
     const fetchWeatherData = async () => {
-      await getForecast(props.latLng[0], props.latLng[1]).then((res) => {
-        sortWeather(res);
+      await getForecast(props.latLng[0], props.latLng[1]).then(async (res) => {
+        await sortWeather(res);
       });
     };
 
@@ -60,7 +51,7 @@ export const WeatherIcons = (props: Props) => {
     if (dataIsAvailable && !isPastSession(props.sessionEnd)) {
       fetchWeatherData();
     }
-  }, [countdownEnded]);
+  }
 
   async function sortWeather(res: any) {
     let forecast_day: any;

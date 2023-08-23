@@ -12,7 +12,7 @@ export const getForecast = async (lat: number, lng: number) => {
 
 export function sessionIsNear(date: Date) {
   const today = new Date();
-  const fiveDaysAgo = sub(today, { days: 3 });
+  const fiveDaysAgo = sub(today, { days: 2 });
   const difference = today.getTime() - fiveDaysAgo.getTime();
 
   return date.getTime() - difference < today.getTime();
