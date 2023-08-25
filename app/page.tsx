@@ -5,6 +5,7 @@ import { Countdown } from "@/app/components/Countdown";
 import { useEffect, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { currentGP } from "@/app/utils/countdownUtil";
+import Script from "next/script";
 
 export default function Home() {
   const [races, setRaces] = useState<any>(null);
@@ -62,6 +63,19 @@ export default function Home() {
           Remaining Races:
         </h1>
         <TrackList races={races}></TrackList>
+      </div>
+      <div className="container">
+        <Script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GTAG_KEY}`}
+        ></Script>
+        <Script id={"google-analytics"}>
+          {`window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', '${process.env.NEXT_PUBLIC_GTAG_KEY}');`}
+        </Script>
       </div>
     </>
   );
