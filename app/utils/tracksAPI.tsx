@@ -5,7 +5,7 @@ export const getTracks = async () => {
   return await axios
     .get("https://ergast.com/api/f1/current.json")
     .catch((e) => {
-      console.log(e);
+      console.error(e);
       return null;
     });
 };

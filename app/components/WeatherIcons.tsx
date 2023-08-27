@@ -39,6 +39,12 @@ export const WeatherIcons = (props: Props) => {
   function getData() {
     const fetchWeatherData = async () => {
       await getForecast(props.latLng[0], props.latLng[1]).then(async (res) => {
+        if (res == null) {
+          setDataIsAvailable(false);
+          setInfoMessage(
+            "There seems to be an error retrieving weather from the API. Please try again later.",
+          );
+        }
         await sortWeather(res);
       });
     };
