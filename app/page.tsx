@@ -9,13 +9,18 @@ import Script from "next/script";
 
 export default function Home() {
   const [races, setRaces] = useState<any>(null);
+  const [apiError, setApiError] = useState<boolean>(false);
 
   useEffect(() => {
     async function getRaces() {
       const response = await getTracks();
-      let races = await response.data.MRData.RaceTable.Races;
-      await addTrackImgs(races);
-      setRaces(races);
+      if (response == null) {
+        setApiError(true);
+      } else {
+        let races = await response.data.MRData.RaceTable.Races;
+        await addTrackImgs(races);
+        setRaces(races);
+      }
     }
 
     getRaces();
@@ -24,19 +29,29 @@ export default function Home() {
   if (races === null) {
     return (
       <>
-        <div className="flex justify-center items-center h-screen w-screen">
-          <p className="text-center py-auto text-red-700">
-            {" "}
-            <span>
-              <AiOutlineLoading3Quarters
-                className="animate-spin mx-auto"
-                size={32}
-                color={"red"}
-              ></AiOutlineLoading3Quarters>
-            </span>
-            Loading...
-          </p>
-        </div>
+        {
+          <div className="flex justify-center items-center h-screen w-screen">
+            {apiError ? (
+              <p className="text-center py-auto text-red-700">
+                {" "}
+                There seems to be an error retrieving data from the API. Please
+                try again later...
+              </p>
+            ) : (
+              <p className="text-center py-auto text-red-700">
+                {" "}
+                <span>
+                  <AiOutlineLoading3Quarters
+                    className="animate-spin mx-auto"
+                    size={32}
+                    color={"red"}
+                  ></AiOutlineLoading3Quarters>
+                </span>
+                Loading...
+              </p>
+            )}
+          </div>
+        }
       </>
     );
   }

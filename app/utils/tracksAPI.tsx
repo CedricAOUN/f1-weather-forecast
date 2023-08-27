@@ -2,7 +2,12 @@ const axios = require("axios");
 import trackImgs from "../../public/tracks.json";
 
 export const getTracks = async () => {
-  return await axios.get("https://ergast.com/api/f1/current.json");
+  return await axios
+    .get("https://ergast.com/api/f1/current.json")
+    .catch((e) => {
+      console.log(e);
+      return null;
+    });
 };
 
 export const getLastTrack = async () => {
