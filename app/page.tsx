@@ -73,7 +73,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="container p-4 lg:px-24 max-w-full">
+      <div className="container p-4 lg:px-24 max-w-full min-h-[85vh]">
         <h1 className="text-white py-16 text-start text-5xl outline-1 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
           Remaining Races:
         </h1>

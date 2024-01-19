@@ -73,7 +73,7 @@ export const Countdown = (props: Props) => {
           size={32}
         ></AiOutlineLoading3Quarters>
       ) : (
-        (target == null && <p>Waiting for results.</p>) || (
+        (target == null && <p>Countdown unavailable right now.</p>) || (
           <p className="text-xl">
             {days} Days, {hours} Hours, {minutes} Minutes, {seconds} Seconds
           </p>
